@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "cybertrust.crypto.configFileDir",
+  "type": "java.lang.String",
+  "description": "Designates the location of the crypto module config file'"
+}]}

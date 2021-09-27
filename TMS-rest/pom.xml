@@ -1,0 +1,194 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cybertrust.tms</groupId>
+	<artifactId>tms-rest</artifactId>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.1.RELEASE</version>
+    </parent>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repository.spring.release</id>
+            <name>Spring GA Repository</name>
+            <url>https://repo.spring.io/plugins-release/</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
+	<properties>
+		<springframework.version>5.2.1.RELEASE</springframework.version>
+		<hibernate.version>5.4.9.Final</hibernate.version>
+		<mysql.connector.version>8.0.18</mysql.connector.version>
+		<c3po.version>0.9.5.4</c3po.version>
+
+		<maven.compiler.source>3.8</maven.compiler.source>
+		<maven.compiler.target>3.8</maven.compiler.target>
+		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			</dependency>
+
+		<!-- Add Jackson for JSON converters -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+
+		<!-- MySQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!-- C3PO -->
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>${c3po.version}</version>
+		</dependency>
+
+		<!-- Servlet+JSP+JSTL -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+
+
+		<!-- to compensate for java 9 not including jaxb -->
+		<dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		</dependency>
+		
+		<dependency>
+  			<groupId>javax.validation</groupId>
+  			<artifactId>validation-api</artifactId>
+		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>2.3.5</version>
+		</dependency>
+		
+	    <dependency>
+	        <groupId>org.mapstruct</groupId>
+	        <artifactId>mapstruct</artifactId>
+	        <version>${org.mapstruct.version}</version>
+	    </dependency>
+	    
+		<dependency>
+		    <groupId>org.mapstruct</groupId>
+		    <artifactId>mapstruct-processor</artifactId>
+		    <version>1.3.1.Final</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.bouncycastle</groupId>
+    		<artifactId>bcprov-jdk15on</artifactId>
+    		<version>1.64</version>
+		</dependency>
+		    
+	</dependencies>
+
+	<build>
+
+		<finalName>tms-rest</finalName>
+
+		<plugins>
+
+			<!-- Builds a Web Application Archive (WAR) file from the project output 
+				and its dependencies. -->
+			<plugin>
+				<!-- Add Maven coordinates (GAV) for: maven-war-plugin -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				</plugin>
+
+
+
+			    <plugin>
+			      <artifactId>maven-compiler-plugin</artifactId>
+			        <configuration>
+			          <source>1.8</source>
+			          <target>1.8</target>
+		                <annotationProcessorPaths>
+				                <path>
+				                    <groupId>org.projectlombok</groupId>
+				                    <artifactId>lombok</artifactId>
+				                    <version>${lombok.version}</version>
+				                </path>		                    <path>
+		                        <groupId>org.mapstruct</groupId>
+		                        <artifactId>mapstruct-processor</artifactId>
+		                        <version>${org.mapstruct.version}</version>
+		                    </path>
+		                    <!-- other annotation processors -->
+		                </annotationProcessorPaths>		
+			            <compilerArgs>
+			                <compilerArg>
+			                       -Amapstruct.defaultComponentModel=spring
+			                </compilerArg>
+			            </compilerArgs>		                	          
+			        </configuration>
+			    </plugin>
+
+				<plugin>
+				  <groupId>org.springframework.boot</groupId>
+				  <artifactId>spring-boot-maven-plugin</artifactId>
+				  <executions>
+				    <execution>
+				      <goals>
+				        <goal>repackage</goal>
+				      </goals>
+				      <configuration>
+				        <classifier>spring-boot</classifier>
+				        <mainClass>com.cybertrust.tms.TMS</mainClass>
+				      </configuration>
+				    </execution>
+				  </executions>
+				</plugin>
+
+		</plugins>
+	</build>
+</project>
+
